@@ -11,6 +11,6 @@ deploy:
   provider: heroku
   api_key:
     secure: jd8zQl0xC57F0+8wWkHq9aD2QWbg4sqP43MN+neovJgbVCr4ySQtnW4Yzd+CF+8exYY7V7U/pzhcRCuzIY3X9QqSo/omQi/yAvMe0i9cwM1soRLvipfdIp+QTsdAuJ++rhcHYszfKZt2VsjmsnzXqNU8t077JlCJtyvL5cs2/bP8A4VTr8Wxpext8eEM2UnyFd/CuB6TrzSXL8dSnSmkSr9oPfKziGPuBZASSqWGzY0JZ4qYGe2mfGAdvCCAN7MFeB7graGXLNG2ahNNvB73sgMMgDFzQUIdxbfLQRamSz+DN6nGBfccmGDtN0pVFaqAb7YdxKHPdLs/4LVhQOPnyqCsuHO6eqQm2FsuJl2xPgh8/L3oO646A4Cx2Uum9zwCN0TN/YPkLODSf2aS1e1cZBcp2WQrWgSr5YhyE+iEnfLsBZk7R31xcuM+wtvd9LG92smnYuvHxJaBdwdow/zkttQRTCs53yEUsnKJ7kwsGYAvY52FA8QOsMTVJCWTLif+vEjpDl8H926RqfCLM/oFX5ij6pz5NSqUhQuNCtaUNrAKGWaysqzfQ5siIfKZCEHB2yn3hkEh816hI8fN1c8dUOGYyESQxxIEbP/dQ320NpaQi6boMkZtSrSoM6HCJb2STECugo0Vm4dIUAENRFCfoKIN6uqqrG2LIOr4Gi4go/Q=
-  app: test-react-xd
+  app: time-trade-web
   on:
     branch: master
