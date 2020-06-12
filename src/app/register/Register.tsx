@@ -20,6 +20,10 @@ interface State {
         email: {
             show: boolean,
             text: string
+        },
+        phone: {
+            show: boolean,
+            text: string
         }
     }
 }
@@ -49,8 +53,6 @@ const customStyles: Record<string, CSSProperties> = {
     }
 };
 
-
-
 class Register extends Component<any, State> {
     constructor(props: State) {
         super(props);
@@ -71,6 +73,10 @@ class Register extends Component<any, State> {
                 email: {
                     show: false,
                     text: "Formato de email inconrrecto"
+                },
+                phone: {
+                    show: false,
+                    text: "Formato de teléfono inválido"
                 }
             }
         };
@@ -94,7 +100,7 @@ class Register extends Component<any, State> {
 
         const incompleteForm = !user.email || !user.name || !user.surname || !user.password || !user.repeatPassword;
 
-        if(incompleteForm || helpers.email.show) {
+        if(incompleteForm || helpers.email.show || helpers.phone.show) {
             console.error("Invalid form");
             return;
         }
@@ -102,12 +108,28 @@ class Register extends Component<any, State> {
         console.log(this.state);
     }
 
-    isCorrectEmail = () => {
+    isValidEmail = () => {
         const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        const correctEmail = regex.test(this.state.user.email.toLowerCase());
+        const valid = regex.test(this.state.user.email.toLowerCase());
 
         const helpers = {...this.state.helpers};
-        helpers.email.show = !correctEmail;
+        helpers.email.show = !valid;
+        this.setState({helpers});
+    }
+
+    isValidPhone = () => {
+        const helpers = {...this.state.helpers};
+
+        if(!this.state.user.phone) {
+            helpers.phone.show = false;
+            this.setState({helpers});
+            return;
+        }
+
+        const regex = /^[679][0-9]{8}$/;
+        const valid = regex.test(this.state.user.phone);
+
+        helpers.phone.show = !valid;
         this.setState({helpers});
     }
 
@@ -120,7 +142,7 @@ class Register extends Component<any, State> {
                             Registro
                         </Typography>
                         <form onSubmit={this.handleSubmit}>
-                            <TextField name="email" label="EMAIL" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.email} onChange={this.onInputChange} required={true} error={this.state.helpers.email.show} helperText={this.state.helpers.email.show ? this.state.helpers.email.text : null} onBlur={this.isCorrectEmail}/>
+                            <TextField name="email" label="EMAIL" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.email} onChange={this.onInputChange} required={true} error={this.state.helpers.email.show} helperText={this.state.helpers.email.show ? this.state.helpers.email.text : null} onBlur={this.isValidEmail}/>
                             <div className="two-field-wrapper">
                                 <TextField name="name" label="NOMBRE" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.name} onChange={this.onInputChange} required={true}/>
                                 <TextField name="surname" label="APELLIDOS" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.surname} onChange={this.onInputChange} required={true}/>
@@ -129,7 +151,7 @@ class Register extends Component<any, State> {
                                 <TextField type="password" name="password" label="CONTRASEÑA" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.password} onChange={this.onInputChange} required={true}/>
                                 <TextField type="password" name="repeatPassword" label="REPITA LA CONTRASEÑA" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.repeatPassword} onChange={this.onInputChange} required={true}/>
                             </div>
-                            <TextField name="phone" label="TELÉFONO" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.phone} onChange={this.onInputChange}/>
+                            <TextField name="phone" label="TELÉFONO" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.phone} onChange={this.onInputChange} error={this.state.helpers.phone.show} helperText={this.state.helpers.phone.show ? this.state.helpers.phone.text : null} onBlur={this.isValidPhone}/>
                         </form>
                     </CardContent>
                     <CardActions style={customStyles.cardActions}>
