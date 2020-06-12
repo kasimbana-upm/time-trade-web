@@ -1,0 +1,6 @@
+.root-wrapper {
+    height: 100vh;
+    width: 100vw;
+    background-color: #e3d9ca;
+    position: fixed;
+}
