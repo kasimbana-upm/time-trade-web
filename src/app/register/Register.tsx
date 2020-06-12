@@ -4,11 +4,18 @@ import "./Register.css";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 interface State {
-    email: string;
-    name: string;
-    surname: string;
-    password: string;
-    repeatPassword: string;
+    user: {
+        email: string;
+        name: string;
+        surname: string;
+        password: string;
+        repeatPassword: string;
+        phone: string;
+    },
+    message: {
+        show: boolean,
+        text: string
+    }
 }
 
 const customStyles: Record<string, CSSProperties> = {
@@ -42,21 +49,31 @@ class Register extends Component<any, State> {
     constructor(props: State) {
         super(props);
         this.state = {
-            email: "",
-            name: "",
-            surname: "",
-            password: "",
-            repeatPassword: ""
+            user: {
+                email: "",
+                name: "",
+                surname: "",
+                password: "",
+                repeatPassword: "",
+                phone: ""
+            },
+            message: {
+                show: false,
+                text: ""
+            }
         };
 
-        this.handlechange = this.handlechange.bind(this);
+        this.onInputChange = this.onInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handlechange(event: any) {
+    onInputChange(event: any) {
         this.setState({
             ...this.state,
-            [event.target.name]: event.target.value
+            user: {
+                ...this.state.user,
+                [event.target.name]: event.target.value
+            }
         });
     }
 
@@ -66,29 +83,35 @@ class Register extends Component<any, State> {
 
     render() {
         return (
-            <Card style={customStyles.card}>
-                <CardContent>
-                    <Typography variant="h3" align="center">
-                        Registro
-                    </Typography>
-                    <form onSubmit={this.handleSubmit}>
-                        <TextField name="email" label="EMAIL" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.email} onChange={this.handlechange} />
-                        <div className="two-field-wrapper">
-                            <TextField name="name" label="NOMBRE" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.name} onChange={this.handlechange} />
-                            <TextField name="surname" label="APELLIDOS" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.surname} onChange={this.handlechange} />
-                        </div>
-                        <div className="two-field-wrapper">
-                            <TextField type="password" name="password" label="CONTRASEÑA" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.password} onChange={this.handlechange} />
-                            <TextField type="password" name="repeatPassword" label="REPITA LA CONTRASEÑA" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.repeatPassword} onChange={this.handlechange} />
-                        </div>
-                    </form>
-                </CardContent>
-                <CardActions style={customStyles.cardActions}>
-                    <Button type="submit" style={customStyles.button} onClick={this.handleSubmit} size="large">
-                        Registrar
-                    </Button>
-                </CardActions>
-            </Card>
+            <div className="root">
+                <Card style={customStyles.card}>
+                    <CardContent>
+                        <Typography variant="h3" align="center">
+                            Registro
+                        </Typography>
+                        <form onSubmit={this.handleSubmit}>
+                            <TextField name="email" label="EMAIL" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.email} onChange={this.onInputChange} required={true}/>
+                            <div className="two-field-wrapper">
+                                <TextField name="name" label="NOMBRE" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.name} onChange={this.onInputChange} required={true}/>
+                                <TextField name="surname" label="APELLIDOS" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.surname} onChange={this.onInputChange} required={true}/>
+                            </div>
+                            <div className="two-field-wrapper">
+                                <TextField type="password" name="password" label="CONTRASEÑA" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.password} onChange={this.onInputChange} required={true}/>
+                                <TextField type="password" name="repeatPassword" label="REPITA LA CONTRASEÑA" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.repeatPassword} onChange={this.onInputChange} required={true}/>
+                            </div>
+                            <TextField name="phone" label="TELÉFONO" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.phone} onChange={this.onInputChange}/>
+                        </form>
+                    </CardContent>
+                    <CardActions style={customStyles.cardActions}>
+                        <Button type="submit" style={customStyles.button} onClick={this.handleSubmit} size="large">
+                            Registrar
+                        </Button>
+                    </CardActions>
+                </Card>
+                {this.state.message.show &&
+                    <p className="message">{this.state.message.text}</p>
+                }
+            </div>
         );
     }
 }
