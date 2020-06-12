@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, ChangeEvent } from "react";
 import { TextField, Card, CardActions, CardContent, Typography, Button } from "@material-ui/core"
 import "./Register.css";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
@@ -15,6 +15,12 @@ interface State {
     message: {
         show: boolean,
         text: string
+    },
+    helpers: {
+        email: {
+            show: boolean,
+            text: string
+        }
     }
 }
 
@@ -60,6 +66,12 @@ class Register extends Component<any, State> {
             message: {
                 show: false,
                 text: ""
+            },
+            helpers: {
+                email: {
+                    show: false,
+                    text: "Formato de email inconrrecto"
+                }
             }
         };
 
@@ -67,9 +79,8 @@ class Register extends Component<any, State> {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    onInputChange(event: any) {
+    onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            ...this.state,
             user: {
                 ...this.state.user,
                 [event.target.name]: event.target.value
@@ -77,8 +88,27 @@ class Register extends Component<any, State> {
         });
     }
 
-    handleSubmit() {
+    handleSubmit = () => {
+        const user = this.state.user;
+        const helpers = this.state.helpers;
+
+        const incompleteForm = !user.email || !user.name || !user.surname || !user.password || !user.repeatPassword;
+
+        if(incompleteForm || helpers.email.show) {
+            console.error("Invalid form");
+            return;
+        }
+
         console.log(this.state);
+    }
+
+    isCorrectEmail = () => {
+        const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const correctEmail = regex.test(this.state.user.email.toLowerCase());
+
+        const helpers = {...this.state.helpers};
+        helpers.email.show = !correctEmail;
+        this.setState({helpers});
     }
 
     render() {
@@ -90,7 +120,7 @@ class Register extends Component<any, State> {
                             Registro
                         </Typography>
                         <form onSubmit={this.handleSubmit}>
-                            <TextField name="email" label="EMAIL" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.email} onChange={this.onInputChange} required={true}/>
+                            <TextField name="email" label="EMAIL" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.email} onChange={this.onInputChange} required={true} error={this.state.helpers.email.show} helperText={this.state.helpers.email.show ? this.state.helpers.email.text : null} onBlur={this.isCorrectEmail}/>
                             <div className="two-field-wrapper">
                                 <TextField name="name" label="NOMBRE" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.name} onChange={this.onInputChange} required={true}/>
                                 <TextField name="surname" label="APELLIDOS" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.surname} onChange={this.onInputChange} required={true}/>
