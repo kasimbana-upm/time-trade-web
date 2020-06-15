@@ -2,6 +2,8 @@ import React, { Component, ChangeEvent } from "react";
 import { TextField, Card, CardActions, CardContent, Typography, Button } from "@material-ui/core"
 import "./Register.css";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import axios from "axios";
+import { API_URL } from "../shared/app.constants";
 
 interface State {
     user: {
@@ -139,7 +141,28 @@ class Register extends Component<any, State> {
             return;
         }
 
-        console.log(this.state);
+        this.doRegister();
+    }
+
+    doRegister = () => {
+        const { user } = this.state;
+        axios.post(API_URL + "/api/register", {user})
+            .then(res => {
+                this.setState({
+                    message: {
+                        show: true,
+                        text: "Registrado correctamente"
+                    }
+                });
+            })
+            .catch(err => {
+                this.setState({
+                    message: {
+                        show: true,
+                        text: err.response.data.message
+                    }
+                });
+            });
     }
 
     isValidEmail = () => {
