@@ -100,6 +100,23 @@ class Register extends Component<any, State> {
 
         const incompleteForm = !user.email || !user.name || !user.surname || !user.password || !user.repeatPassword;
 
+        if(incompleteForm) {
+            this.setState({
+                message: {
+                    show: true,
+                    text: "Falta algún campo obligatorio"
+                }
+            });
+            return;
+        } else {
+            this.setState({
+                message: {
+                    show: false,
+                    text: ""
+                }
+            });
+        }
+
         if(incompleteForm || helpers.email.show || helpers.phone.show) {
             console.error("Invalid form");
             return;
