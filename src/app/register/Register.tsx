@@ -146,7 +146,7 @@ class Register extends Component<any, State> {
 
     doRegister = () => {
         const { user } = this.state;
-        axios.post(API_URL + "/api/register", {user})
+        axios.post(API_URL + "/register", {user})
             .then(res => {
                 this.setState({
                     message: {
