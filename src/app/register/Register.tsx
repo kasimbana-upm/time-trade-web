@@ -117,8 +117,25 @@ class Register extends Component<any, State> {
             });
         }
 
-        if(incompleteForm || helpers.email.show || helpers.phone.show) {
-            console.error("Invalid form");
+        const passwordsMatch = user.password === user.repeatPassword;
+
+        if(!passwordsMatch) {
+            this.setState({
+                message: {
+                    show: true,
+                    text: "Las contraseñas no coinciden"
+                }
+            })
+        } else {
+            this.setState({
+                message: {
+                    show: false,
+                    text: ""
+                }
+            });
+        }
+
+        if(incompleteForm || !passwordsMatch || helpers.email.show || helpers.phone.show) {
             return;
         }
 
