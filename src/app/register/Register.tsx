@@ -72,11 +72,11 @@ class Register extends Component<any, State> {
             helpers: {
                 email: {
                     show: false,
-                    text: "Formato de email inconrrecto"
+                    text: "Formato de email incorrecto"
                 },
                 phone: {
                     show: false,
-                    text: "Formato de teléfono inválido"
+                    text: "Formato de teléfono incorrecto"
                 }
             }
         };
@@ -142,16 +142,16 @@ class Register extends Component<any, State> {
                             Registro
                         </Typography>
                         <form onSubmit={this.handleSubmit}>
-                            <TextField name="email" label="EMAIL" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.email} onChange={this.onInputChange} required={true} error={this.state.helpers.email.show} helperText={this.state.helpers.email.show ? this.state.helpers.email.text : null} onBlur={this.isValidEmail}/>
+                            <TextField name="email" label="EMAIL" placeholder="email" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.email} onChange={this.onInputChange} required={true} error={this.state.helpers.email.show} helperText={this.state.helpers.email.show ? this.state.helpers.email.text : null} onBlur={this.isValidEmail}/>
                             <div className="two-field-wrapper">
-                                <TextField name="name" label="NOMBRE" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.name} onChange={this.onInputChange} required={true}/>
-                                <TextField name="surname" label="APELLIDOS" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.surname} onChange={this.onInputChange} required={true}/>
+                                <TextField name="name" label="NOMBRE" placeholder="name" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.name} onChange={this.onInputChange} required={true}/>
+                                <TextField name="surname" label="APELLIDOS" placeholder="surname" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.surname} onChange={this.onInputChange} required={true}/>
                             </div>
                             <div className="two-field-wrapper">
-                                <TextField type="password" name="password" label="CONTRASEÑA" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.password} onChange={this.onInputChange} required={true}/>
-                                <TextField type="password" name="repeatPassword" label="REPITA LA CONTRASEÑA" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.repeatPassword} onChange={this.onInputChange} required={true}/>
+                                <TextField type="password" name="password" label="CONTRASEÑA" placeholder="password" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.password} onChange={this.onInputChange} required={true}/>
+                                <TextField type="password" name="repeatPassword" label="REPITA LA CONTRASEÑA" placeholder="repeatPassword" variant="outlined" style={customStyles.twoColumnTextfield} value={this.state.user.repeatPassword} onChange={this.onInputChange} required={true}/>
                             </div>
-                            <TextField name="phone" label="TELÉFONO" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.phone} onChange={this.onInputChange} error={this.state.helpers.phone.show} helperText={this.state.helpers.phone.show ? this.state.helpers.phone.text : null} onBlur={this.isValidPhone}/>
+                            <TextField name="phone" label="TELÉFONO" placeholder="phone" variant="outlined" style={customStyles.oneColumnTextfield} value={this.state.user.phone} onChange={this.onInputChange} error={this.state.helpers.phone.show} helperText={this.state.helpers.phone.show ? this.state.helpers.phone.text : null} onBlur={this.isValidPhone}/>
                         </form>
                     </CardContent>
                     <CardActions style={customStyles.cardActions}>
