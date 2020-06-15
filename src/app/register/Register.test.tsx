@@ -2,6 +2,84 @@ import React from 'react';
 import { screen, fireEvent, render } from '@testing-library/react';
 import Register from './Register';
 import Faker from "faker";
+import { rest } from 'msw'
+import { setupServer } from 'msw/node'
+import { API_URL } from "../shared/app.constants";
+
+const server = setupServer(
+    rest.post(API_URL + "/register", (req, res, ctx) => {
+        return res(ctx.status(200));
+    })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+test("register successfully", async () => {
+    render(<Register />);
+
+    const password = Faker.internet.password();
+
+    fireEvent.change(screen.getByPlaceholderText("email"), {
+        target: {value: Faker.internet.email()}
+    });
+    fireEvent.change(screen.getByPlaceholderText("name"), {
+        target: {value: Faker.name.firstName()}
+    });
+    fireEvent.change(screen.getByPlaceholderText("surname"), {
+        target: {value: Faker.name.lastName()}
+    });
+    fireEvent.change(screen.getByPlaceholderText("password"), {
+        target: {value: password}
+    });
+    fireEvent.change(screen.getByPlaceholderText("repeatPassword"), {
+        target: {value: password}
+    });
+
+    fireEvent.click(screen.getByText("Registrar"));
+
+    const successMessage = await screen.findByText("Registrado correctamente");
+
+    expect(successMessage).toBeInTheDocument();
+});
+
+test("handles server exceptions", async () => {
+    server.use(
+        rest.post("https://time-trade-backend.herokuapp.com/api/register", (req, res, ctx) => {
+            return res(
+                ctx.status(409),
+                ctx.json({message: "Ya existe un usuario con este email"})
+            );
+        })
+    );
+
+    const password = Faker.internet.password();
+
+    render(<Register />);
+    
+    fireEvent.change(screen.getByPlaceholderText("email"), {
+        target: {value: Faker.internet.email()}
+    });
+    fireEvent.change(screen.getByPlaceholderText("name"), {
+        target: {value: Faker.name.firstName()}
+    });
+    fireEvent.change(screen.getByPlaceholderText("surname"), {
+        target: {value: Faker.name.lastName()}
+    });
+    fireEvent.change(screen.getByPlaceholderText("password"), {
+        target: {value: password}
+    });
+    fireEvent.change(screen.getByPlaceholderText("repeatPassword"), {
+        target: {value: password}
+    });
+
+    fireEvent.click(screen.getByText("Registrar"));
+
+    const errorMessage = await screen.findByText("Ya existe un usuario con este email");
+
+    expect(errorMessage).toBeInTheDocument();
+});
 
 test("controls email validation", () => {
     render(<Register />);
@@ -85,8 +163,10 @@ test("dont send form if required field is missing", async () => {
         target: {value: password}
     });
     fireEvent.click(submitButton);
-    
+
     expect(screen.queryByText("Falta algún campo obligatorio")).toBeNull();
+
+    await screen.findByText("Registrado correctamente");
 });
 
 test("controls passwords match", () => {
